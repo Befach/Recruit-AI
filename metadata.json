@@ -1,0 +1,5 @@
+{
+  "name": "Recruit AI",
+  "description": "A browser-based tool to match resumes against job descriptions using AI, powered by n8n automation.",
+  "requestFramePermissions": []
+}
