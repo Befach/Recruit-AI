@@ -1,0 +1,315 @@
+agent:
+  name: financial_statement_insights_agent
+  version: 1.0.0
+  description: >
+    An AI agent that ingests company financial statements, extracts structured
+    data, computes financial ratios, benchmarks them against industry peers,
+    detects gaps and anomalies, and generates actionable insights.
+
+  objectives:
+    - Extract financial data from uploaded P&L, Balance Sheet, and Cash Flow statements
+    - Normalize financial line items into a standard schema
+    - Compute profitability, liquidity, solvency, efficiency, working capital, investment, and cash quality metrics
+    - Compare metrics against industry and peer benchmarks
+    - Detect gaps, risks, and unusual patterns
+    - Generate concise management-grade insights and recommendations
+
+  inputs:
+    accepted_documents:
+      - profit_and_loss_statement
+      - balance_sheet
+      - cash_flow_statement
+      - notes_to_accounts
+      - auditor_report
+      - prior_year_financials
+    accepted_formats:
+      - pdf
+      - scanned_pdf
+      - xlsx
+      - csv
+      - json
+    required_fields:
+      - company_name
+      - fiscal_year
+      - reporting_currency
+      - industry
+      - statement_type
+    optional_fields:
+      - consolidated_or_standalone
+      - country
+      - quarter
+      - segment_data
+
+  preprocessing:
+    document_handling:
+      ocr_enabled: true
+      table_extraction_enabled: true
+      language_support:
+        - en
+      confidence_threshold: 0.85
+
+    normalization:
+      standard_chart_of_accounts: true
+      map_synonyms:
+        revenue:
+          - sales
+          - turnover
+          - operating_income
+        cogs:
+          - cost_of_goods_sold
+          - cost_of_sales
+        other_income:
+          - non_operating_income
+          - miscellaneous_income
+        current_assets:
+          - ca
+        current_liabilities:
+          - cl
+        investments:
+          - marketable_securities
+          - short_term_investments
+          - long_term_investments
+
+    data_quality_checks:
+      - missing_values_detection
+      - duplicate_line_item_detection
+      - negative_value_validation
+      - cross_statement_consistency_check
+      - prior_period_comparison
+      - currency_unit_consistency
+
+  analytics:
+    ratio_categories:
+      profitability:
+        - gross_margin
+        - ebitda_margin
+        - ebit_margin
+        - net_profit_margin
+        - roa
+        - roe
+        - roce
+
+      liquidity:
+        - current_ratio
+        - quick_ratio
+        - cash_ratio
+        - working_capital
+
+      solvency:
+        - debt_to_equity
+        - debt_to_assets
+        - net_debt_to_ebitda
+        - interest_coverage
+        - fixed_charge_coverage
+
+      efficiency:
+        - total_asset_turnover
+        - fixed_asset_turnover
+        - inventory_turnover
+        - receivables_turnover
+        - payables_turnover
+
+      working_capital:
+        - days_sales_outstanding
+        - days_inventory_outstanding
+        - days_payables_outstanding
+        - cash_conversion_cycle
+
+      expenses:
+        - employee_expense_to_revenue
+        - marketing_expense_to_revenue
+        - admin_expense_to_revenue
+        - other_expense_to_revenue
+        - total_op_ex_to_revenue
+
+      investment_quality:
+        - investments_to_total_assets
+        - investments_to_equity
+        - current_investments_to_total_investments
+        - non_current_investments_to_total_investments
+
+      cash_quality:
+        - operating_cash_flow_to_pat
+        - operating_cash_flow_margin
+        - free_cash_flow
+        - accrual_ratio
+
+    trend_analysis:
+      periods:
+        - 1y
+        - 3y
+        - 5y
+      compare_against:
+        - prior_period
+        - trailing_average
+        - peer_group_median
+
+    anomaly_detection:
+      enabled: true
+      methods:
+        - z_score
+        - percentile_outlier
+        - trend_break_detection
+        - rule_based_flags
+
+  benchmarking:
+    benchmark_sources:
+      - industry_median
+      - industry_25th_percentile
+      - industry_75th_percentile
+      - peer_company_set
+      - company_own_history
+
+    peer_group_selection:
+      filters:
+        - industry
+        - geography
+        - company_size_band
+        - business_model
+        - reporting_standard
+      minimum_peer_count: 5
+
+    benchmark_logic:
+      comparison_mode: "same_industry_same_size_band"
+      fallback_mode: "industry_only"
+      if_benchmark_missing: "use_historical_and_flag_low_confidence"
+
+  insight_engine:
+    insight_types:
+      - performance_summary
+      - ratio_gap_analysis
+      - industry_comparison
+      - trend_commentary
+      - risk_flags
+      - management_actions
+      - investor_signals
+
+    severity_levels:
+      - low
+      - medium
+      - high
+      - critical
+
+    rules:
+      - if current_ratio < industry_median then flag liquidity_pressure
+      - if receivables_days > industry_75th_percentile then flag collection_risk
+      - if inventory_days > industry_75th_percentile then flag inventory_buildup
+      - if interest_coverage < 2.0 then flag debt_service_risk
+      - if operating_cash_flow_to_pat < 1.0 for 2 consecutive years then flag earnings_quality_risk
+      - if investments_to_total_assets > industry_75th_percentile and core_business_non_financial then flag idle_capital_or_non_core_assets
+      - if opex_to_revenue rises faster than revenue for 2 periods then flag cost_pressure
+      - if fixed_asset_turnover is below peer median then flag asset_underutilization
+
+    narrative_style:
+      tone: "professional"
+      format: "concise_actionable"
+      include:
+        - what_changed
+        - why_it_matters
+        - how_it_compares
+        - what_to_watch_next
+
+  outputs:
+    report_sections:
+      - executive_summary
+      - data_quality_summary
+      - financial_ratio_dashboard
+      - benchmark_comparison
+      - gap_analysis
+      - risk_flags
+      - recommendations
+      - appendix_of_formulas
+
+    output_formats:
+      - json
+      - yaml
+      - pdf
+      - markdown
+
+    json_schema:
+      company_name: string
+      fiscal_year: string
+      industry: string
+      overall_rating: string
+      key_strengths: array
+      key_weaknesses: array
+      key_risks: array
+      metrics:
+        type: object
+      benchmarks:
+        type: object
+      insights:
+        type: array
+      recommendations:
+        type: array
+      confidence_score: number
+
+  example_output_fields:
+    overall_rating: "B+"
+    key_strengths:
+      - "Strong gross margin relative to peers"
+      - "Healthy interest coverage"
+    key_weaknesses:
+      - "Receivables days above industry median"
+      - "Operating cash flow weaker than reported profit"
+    key_risks:
+      - "Working capital pressure"
+      - "Rising employee cost ratio"
+
+  integrations:
+    llm:
+      enabled: true
+      use_for:
+        - narrative_generation
+        - anomaly_explanation
+        - recommendation_generation
+        - document_summarization
+
+    storage:
+      raw_documents: "object_storage"
+      extracted_tables: "database"
+      normalized_financials: "database"
+      benchmark_data: "warehouse"
+      generated_reports: "object_storage"
+
+    api_endpoints:
+      - /upload
+      - /extract
+      - /analyze
+      - /benchmark
+      - /report
+
+  guardrails:
+    compliance_checks:
+      - do_not_invent_missing_numbers
+      - cite_source_for_each_metric
+      - mark_low_confidence_extractions
+      - distinguish_estimates_from_reported_values
+
+    disclaimer:
+      enabled: true
+      text: >
+        This analysis is for decision support only and should not be treated as
+        audited financial advice or a substitute for professional review.
+
+  confidence_scoring:
+    extraction_confidence_weight: 0.4
+    normalization_confidence_weight: 0.2
+    benchmark_confidence_weight: 0.2
+    anomaly_confidence_weight: 0.2
+
+  scheduling:
+    trigger:
+      - on_new_document_upload
+      - on_statement_update
+      - on_new_peer_benchmark_refresh
+    run_mode: "event_driven"
+
+  extensibility:
+    future_modules:
+      - fraud_indicator_detection
+      - segment_level_analysis
+      - cash_flow_forecasting
+      - covenant_monitoring
+      - board_pack_generation
+      - investor_qna_assistant
